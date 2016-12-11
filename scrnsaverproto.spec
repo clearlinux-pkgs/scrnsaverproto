@@ -4,7 +4,7 @@
 #
 Name     : scrnsaverproto
 Version  : 1.2.2
-Release  : 6
+Release  : 7
 URL      : http://xorg.freedesktop.org/releases/individual/proto/scrnsaverproto-1.2.2.tar.bz2
 Source0  : http://xorg.freedesktop.org/releases/individual/proto/scrnsaverproto-1.2.2.tar.bz2
 Summary  : ScrnSaver extension headers
@@ -12,6 +12,7 @@ Group    : Development/Tools
 License  : X11
 Requires: scrnsaverproto-doc
 BuildRequires : libxslt-bin
+BuildRequires : pkgconfig(xorg-macros)
 BuildRequires : xmlto
 
 %description
@@ -22,6 +23,7 @@ and also to query screensaver info on specific windows.
 %package dev
 Summary: dev components for the scrnsaverproto package.
 Group: Development
+Provides: scrnsaverproto-devel
 
 %description dev
 dev components for the scrnsaverproto package.
@@ -39,10 +41,15 @@ doc components for the scrnsaverproto package.
 %setup -q -n scrnsaverproto-1.2.2
 
 %build
+export LANG=C
 %configure --disable-static
-make V=1 %{?_smp_mflags}
+make V=1  %{?_smp_mflags}
 
 %check
+export LANG=C
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
@@ -56,7 +63,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 /usr/include/X11/extensions/saver.h
 /usr/include/X11/extensions/saverproto.h
-/usr/lib64/pkgconfig/*.pc
+/usr/lib64/pkgconfig/scrnsaverproto.pc
 
 %files doc
 %defattr(-,root,root,-)
